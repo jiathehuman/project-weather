@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from "react";
-import {Input} from "@heroui/input";
+import React, { useState, useEffect } from "react";
+import { Button } from "@heroui/button";
+import { Spinner } from "@heroui/spinner";
 
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
@@ -17,77 +18,94 @@ interface WeatherData {
 }
 
 export default function WeatherPage() {
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<WeatherData | null>(null);
-  const [country, setCountry] = useState("Singapore");
-  // const [value, setValue] = React.useState("");
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("Singapore");
-  
-  const fetchData = () => {
-    fetch(`/api/weather/?location=${searchQuery ?? "Singapore"}&unit=celsius`) // Use the proxy path
-    .then((res) => res.json())
-    .then((result) => {
-      // console.log(result.data);
-      setData(result.data)
-    })
-    .catch((err) => console.error("Fetch error:", err)); // Always add a catch block for error handling
-  }
-  useEffect(() => {
-    fetchData()
-  // fetch(`/api/weather/?location=${country}&unit=celsius`) // Use the proxy path
-  //   .then((res) => res.json())
-  //   .then((result) => {
-  //     // console.log(result.data);
-  //     setData(result.data)
-  //   })
-  //   .catch((err) => console.error("Fetch error:", err)); // Always add a catch block for error handling
-}, []);
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    setCountry(searchQuery);
-    fetchData()
+  const fetchData = async (query: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch(`/api/weather/?location=${encodeURIComponent(query)}&unit=celsius`);
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      const result = await res.json();
+      setData(result?.data ?? null);
+    } catch (err: any) {
+      console.error("Fetch error:", err);
+      setData(null);
+      setError(err?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleChange = (e: any) => {
+  // Fetch on mount and whenever searchQuery changes
+  useEffect(() => {
+    if (searchQuery.trim()) fetchData(searchQuery.trim());
+  }, [searchQuery]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // We already have the controlled value in state; just ensure it's not empty
+    const q = searchQuery.trim();
+    if (!q) return;
+    // Triggering setSearchQuery again is unnecessary; useEffect will have already run if it changed
+    // If you want to force a refetch for the same value, call fetchData(q) here.
+    fetchData(q);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
-
-  // const handleSubmit = (e: any) => {
-  //   e.preventDefault();
-  //   setCountry(searchQuery);
-  // };
-
-  // const handleChange = (e: any) => {
-  //   setSearchQuery(value);
-  // };
 
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
         <div className="inline-block max-w-lg text-center justify-center">
-          <h1 className={title()}>Weather</h1>
-                        <div className="form-container">
-            <form onSubmit={handleSubmit}>
-              <label>Enter a country: </label>
-                    {/* <Input label="Search location" placeholder="Enter a country or city" 
-                    value={value} onValueChange={handleChange} type="text" /> */}
+          <h1 className={title({ color: "blue" })}>Weather</h1>
 
+          <div className="form-container">
+            <form onSubmit={handleSubmit} className="my-6">
+              <label htmlFor="location">Enter a country: </label>
+              <br />
               <input
-                name="searchQuery"
+                id="location"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline text-center"
+                name="location"
                 type="text"
-                value={searchQuery || ""}
+                value={searchQuery}
                 onChange={handleChange}
-              ></input>
-              <button type="submit">Submit</button>
+                placeholder="e.g. Singapore"
+              />
+              <br />
+              <Button color="primary" type="submit" variant="ghost" isDisabled={loading || !searchQuery.trim()}>
+                {loading ? "Loading..." : "Submit"}
+              </Button>
             </form>
-        </div>
-          <h2>Temperature: {data?.temperature}</h2>
-          <p>{data?.country}</p>
-          <p>{data?.region}</p>
+          </div>
 
-          {/* <h2>{data.location}</h2>
-          <p>Humidity: {data.humidity}</p>
-         */}
+          {loading && (
+            <div className="mt-4">
+              <Spinner classNames={{ label: "text-foreground mt-4" }} label="Loading weather..." variant="wave" />
+            </div>
+          )}
+
+          {!loading && error && (
+            <p className="text-red-500 mt-4">{error}</p>
+          )}
+
+          {!loading && !error && data && (
+            <div className="mt-4">
+              <h2 className="text-xl font-semibold">{data.country}</h2>
+              <p>Temperature: {data.temperature} °C</p>
+              <p>{data.region}</p>
+            </div>
+          )}
+
+          {!loading && !error && !data && (
+            <p className="mt-4 text-gray-500">No data yet. Try searching for a location.</p>
+          )}
         </div>
       </section>
     </DefaultLayout>

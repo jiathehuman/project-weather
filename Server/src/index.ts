@@ -8,14 +8,6 @@ import "reflect-metadata";
 import { initDatabase } from "./init_db";
 import dashboardRouter from "../routes/dashboardRoutes";
 
-
-// const app = express();
-
-
-
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-
 const { PORT = 3000 } = process.env;
 
 async function main() {

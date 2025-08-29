@@ -1,7 +1,17 @@
-# Project weather
+# ☁️ Project weather
 
-## Authentication 
-### Register
+## Starting the application
+- Start server
+`cd Server`
+`npm start`
+
+- Start client
+`cd client`
+`npm run dev`
+
+## Backend
+### Authentication 
+#### Register
 - Register for a new user
 POST http://localhost:3000/auth/register
 
@@ -11,6 +21,7 @@ POST http://localhost:3000/auth/register
     "password": "Asdfghjk123!"
 }
 
+#### Login
 - Login for the new user
 POST http://localhost:3000/auth/login
 
@@ -23,7 +34,7 @@ POST http://localhost:3000/auth/login
 Retrieve the JWT token and use it to test:
 GET http://localhost:3000/auth/test
 
-## Preferences
+### Preferences
 - Retrieve preferences (Route requires token)
 GET http://localhost:3000/preferences
 Successful response:
@@ -52,7 +63,7 @@ Successful response
     }
 }
 
-## Weather
+### Weather
 I chose WeatherAPI because it has an Interactive API Explorer that lets me play around with it.
 
 Currently there is one route
