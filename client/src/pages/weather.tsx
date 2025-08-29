@@ -40,18 +40,14 @@ export default function WeatherPage() {
     }
   };
 
-  // Fetch on mount and whenever searchQuery changes
   useEffect(() => {
     if (searchQuery.trim()) fetchData(searchQuery.trim());
   }, [searchQuery]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // We already have the controlled value in state; just ensure it's not empty
     const q = searchQuery.trim();
     if (!q) return;
-    // Triggering setSearchQuery again is unnecessary; useEffect will have already run if it changed
-    // If you want to force a refetch for the same value, call fetchData(q) here.
     fetchData(q);
   };
 
