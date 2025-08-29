@@ -1,0 +1,88 @@
+# Node.js
+# ==================================
+/node_modules
+/dist
+/build
+/out
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+
+# Frontend Build
+# ==================================
+# Vite-specific build output
+/dist
+# Common build output folders
+/build
+# Webpack bundles
+/public/dist
+# Parcel
+.parcel-cache
+/dist
+# Create React App
+/build
+
+# Editor and IDE Files
+# ==================================
+# VS Code
+.vscode/
+# To exclude settings but keep extensions recommendations
+!.vscode/extensions.json
+# IntelliJ/WebStorm
+.idea/
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+# Vim
+.vimrc.local
+.swp
+.swo
+# Atom
+.atom/
+# Editor Configuration
+.editorconfig
+# Eslint
+.eslintrc.json
+# Prettier
+.prettierrc
+
+# OS and Environment
+# ==================================
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Environment Variables and Secret Keys
+# ==================================
+# To prevent committing sensitive information
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# Other common secret files
+*.env.json
+*.key
+*.pem
+*.p12
+
+# Database
+# ==================================
+# SQLite databases
+*.db
+*.sqlite
+# Other database files
+*.sql
+# Prisma
+/prisma/dev.db
+
+# Logs and Temporary Files
+# ==================================
+log/
+*.log
+*.tmp
+temp/
