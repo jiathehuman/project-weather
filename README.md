@@ -14,22 +14,24 @@
 #### Register
 - Register for a new user
 POST http://localhost:3000/auth/register
-
+```
 {
     "username": "joedoe",
     "email": "joedoe@gmail.com",
     "password": "Asdfghjk123!"
 }
+```
 
 #### Login
 - Login for the new user
 POST http://localhost:3000/auth/login
-
+```
 {
     "username": "joedoe",
     "password": "Asdfghjk123!",
     "repeat_password": "Asdfghjk123!"
 }
+```
 
 Retrieve the JWT token and use it to test:
 GET http://localhost:3000/auth/test
@@ -38,6 +40,7 @@ GET http://localhost:3000/auth/test
 - Retrieve preferences (Route requires token)
 GET http://localhost:3000/preferences
 Successful response:
+```
 {
     "data": {
         "id": "162d5bea-0978-4d5c-9d14-59c2fb4fb60e",
@@ -48,10 +51,12 @@ Successful response:
         "updatedAt": "2025-08-28T07:51:19.000Z"
     }
 }
+````
 
 - Create or update a user's preferences (Route requires token)
 POST http://localhost:3000/preferences
 Successful response
+```
 {
     "data": {
         "id": "162d5bea-0978-4d5c-9d14-59c2fb4fb60e",
@@ -62,6 +67,7 @@ Successful response
         "updatedAt": "2025-08-28T07:51:19.000Z"
     }
 }
+```
 
 ### Weather
 I chose WeatherAPI because it has an Interactive API Explorer that lets me play around with it.
@@ -74,6 +80,7 @@ http://localhost:3000/weather/london
 http://localhost:3000/weather/1.3521,103.8198
 
 **Raw API response**
+```
 {
     "location": {
         "name": "London",
@@ -121,8 +128,9 @@ http://localhost:3000/weather/1.3521,103.8198
         "gust_kph": 19.0
     }
 }
-
+```
 **Transformed response**
+```
 {
     "source": "cache",
     "data": {
@@ -137,3 +145,4 @@ http://localhost:3000/weather/1.3521,103.8198
     },
     "message": "Successfully retrieved data"
 }
+```
